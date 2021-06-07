@@ -2,7 +2,7 @@
 using System;
 using System.Text;
 
-namespace PraktZavd1
+namespace MainProgram
 {
 
     class Service : DbEntity<Service>

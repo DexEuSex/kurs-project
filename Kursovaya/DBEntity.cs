@@ -3,7 +3,7 @@ using System.Reflection;
 using System.Collections.Generic;
 using System.Text;
 
-namespace PraktZavd1
+namespace MainProgram
 {
     abstract class DbEntity<T>
     {

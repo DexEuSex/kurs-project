@@ -2,7 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-namespace PraktZavd1
+
+namespace MainProgram
 {
     public delegate void MenuDelegate();
     class Program

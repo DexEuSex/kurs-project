@@ -1,5 +1,5 @@
 ﻿using Kursovaya;
-using PraktZavd1;
+using MainProgram;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
