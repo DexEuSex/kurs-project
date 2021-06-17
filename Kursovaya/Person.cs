@@ -1,12 +1,7 @@
-﻿using Kursovaya;
-using System;
-using System.Collections.Generic;
-using System.Reflection;
-using System.Text;
+﻿using System;
 
 namespace MainProgram
 {
-
     abstract class Person<T> : DbEntity<T>
     {
         private string firstName;

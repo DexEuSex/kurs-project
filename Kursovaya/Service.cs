@@ -1,6 +1,5 @@
 ﻿using Kursovaya;
 using System;
-using System.Text;
 
 namespace MainProgram
 {
@@ -142,7 +141,7 @@ namespace MainProgram
             Program.EditServiceOptionsMenu();
         }
 
-        public static void AddToDatabase(DBItem<Service> serviceDataBase, MenuDelegate goToPreviousMenu)
+        public static void AddToDatabase(DataBase<Service> serviceDataBase, MenuDelegate goToPreviousMenu)
         {
             try
             {

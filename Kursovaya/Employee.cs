@@ -1,7 +1,5 @@
 ﻿using MainProgram;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Kursovaya
 {
@@ -94,7 +92,7 @@ namespace Kursovaya
             Program.EditServiceOptionsMenu();
         }
 
-        public static void AddToDatabase(DBItem<Employee> employeeDataBase, MenuDelegate goToPreviousMenu)
+        public static void AddToDatabase(DataBase<Employee> employeeDataBase, MenuDelegate goToPreviousMenu)
         {
             try
             {

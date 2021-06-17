@@ -26,7 +26,7 @@ namespace Kursovaya
 
             serviceFieldOptions.Insert(serviceFieldOptions.Count, $"[{serviceFieldOptions.Count}] Вернуться назад");
 
-            int num = StartMenu(serviceFieldOptions, serviceFieldOptions.Count);
+            int num = CreateMenuWindow(serviceFieldOptions, serviceFieldOptions.Count);
             int userChoise = num - 1;
             int lastElementOfMenu = serviceFieldOptions.Count - 1;
 
@@ -34,14 +34,15 @@ namespace Kursovaya
                 goToPreviousMenu();
             else if (num < lastElementOfMenu)
                 objectPropertyInfo[userChoise].SetValue(objectToEdit, objectPropertyInfo[userChoise].GetValue(objectToEdit));
+
+            Dispose();
         }
 
         public void EditOptions(List<T> dataBase, List<string> menuOpts, MenuDelegate goToPreviousMenu, EditParamsMenu goToEditParmsMenu)
         {
-
             menuOpts.Insert(menuOpts.Count, $"[{menuOpts.Count}] Вернуться назад");
 
-            int num = StartMenu(menuOpts, menuOpts.Count + 1);
+            int num = CreateMenuWindow(menuOpts, menuOpts.Count + 1);
             int userChoise = num - 1;
             int lastElementOfMenu = menuOpts.Count - 1;
 
@@ -49,42 +50,45 @@ namespace Kursovaya
                 goToPreviousMenu();
             else if (num < lastElementOfMenu)
                 goToEditParmsMenu(dataBase[userChoise]);
+
+            Dispose();
         }
 
-        public static void AddItemToDataBase(DBItem<T> dataBase, MenuDelegate mainMenuMethod)
+        public static void AddItemToDataBase(DataBase<T> dataBase, MenuDelegate mainMenuMethod)
         {
             void AddServiceToDataBase()
             {
-                Service.AddToDatabase(dataBase as DBItem<Service>, mainMenuMethod);
+                Service.AddToDatabase(dataBase as DataBase<Service>, mainMenuMethod);
             }
 
             void AddEmployeeToDataBase()
             {
-                Employee.AddToDatabase(dataBase as DBItem<Employee>, mainMenuMethod);
+                Employee.AddToDatabase(dataBase as DataBase<Employee>, mainMenuMethod);
             }
 
-            if (dataBase is DBItem<Service>)
+            if (dataBase is DataBase<Service>)
             {
                 AddServiceToDataBase();
             }
 
-            else if (dataBase is DBItem<Employee>)
+            else if (dataBase is DataBase<Employee>)
             {
                 AddEmployeeToDataBase();
             }
 
         }
 
-        public static int StartMenu(List<string> menuOptionsArray, int optionsLimit) // Bызов менюшки
+        public static int CreateMenuWindow(List<string> menuOptionsArray, int optionsLimit)
         {
             Console.Clear();
             Console.SetWindowSize(110, 50);
             foreach (string text in menuOptionsArray)
-                Console.WriteLine(text);
-            int num = Keys(optionsLimit, menuOptionsArray);
+            Console.WriteLine(text);
+            int num = MenuKeys(optionsLimit, menuOptionsArray); // Создание окна меню
             return num;
         }
-        public static int Keys(int optionsLimit, List<string> menuOptionArray) // Работа менюшки
+
+        public static int MenuKeys(int optionsLimit, List<string> menuOptionArray) // Работа менюшки
         {
             void PrintOption(List<string> menuOptionArray, int optionIndex)
             {
@@ -135,5 +139,7 @@ namespace Kursovaya
             } while (!flag);
             return num;
         }
+
+        
     }
 }

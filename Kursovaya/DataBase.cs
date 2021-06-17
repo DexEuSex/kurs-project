@@ -1,17 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace Kursovaya
 {
-    class DBItem<T>
+    class DataBase<T>
     {
         public List<T> Items { get; set; }
 
-        public DBItem()
+        public DataBase()
         {
             this.Items = new List<T>();
-
         }
 
         public void AddItemToList(T item)

@@ -3,13 +3,37 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace MainProgram
+namespace MainProgram 
 {
     public delegate void MenuDelegate();
-    class Program
+    class Program : IDisposable
     {
-        static DBItem<Service> dBService = new DBItem<Service>();
-        static DBItem<Employee> dBEmployee = new DBItem<Employee>();
+
+        static DataBase<Service> dBService = new DataBase<Service>();
+        static DataBase<Employee> dBEmployee = new DataBase<Employee>();
+
+        public static void MainMenu()
+        {
+            List<string> mainMenuOptions = new List<string>()
+            {
+                "Необходимо выбрать операцию. Используйте стрелки вниз-вверх для навигации. Для подтверждения нажмите - Ентер\n",
+                "[1] Редактировать информацию (в разработке)",
+                "[2] Добавить информацию (в разработке)",
+                "[3] Удалить информацию (в разработке)",
+                "[4] Выход из приложения"
+            };
+        
+            int num = MenuActions<object>.CreateMenuWindow(mainMenuOptions, 5);
+            switch (num)
+            {
+                case 1: { ChooseObjToEditMenu(); } break;
+                case 2: { ChooseObjToAddMenu(); } break;
+                case 3: { Console.WriteLine("выбор №3"); Console.ReadKey(); } break;
+                case 4: { } break;
+            }
+            if (num == mainMenuOptions.Count) Environment.Exit(0);
+        }
+
 
         public static void ChooseObjToEditMenu()
         {
@@ -22,7 +46,7 @@ namespace MainProgram
                   "[4] Редактировать информацию о сотрудниках (класс Employee)",
                   "[5] Назад в главное меню"
             };
-            int num = StartMenu(editMenuOptions, editMenuOptions.Count);
+            int num = MenuActions<object>.CreateMenuWindow(editMenuOptions, editMenuOptions.Count);
             switch (num)
             {
                 case 1: { EditServiceOptionsMenu(); } break;
@@ -49,7 +73,6 @@ namespace MainProgram
                 MenuActions<Service>.EditParamsMenu editParamsMenu = EditServiceParamsMenu;
                 menu.EditOptions(dBService.Items, serviceMenuOptions, goToPreviousMenu, editParamsMenu);
             }
-
         }
 
         public static void EditEmployeeOptionsMenu()
@@ -90,29 +113,6 @@ namespace MainProgram
             }
         }
 
-
-        public static void MainMenu()
-        {
-            List<string> mainMenuOptions = new List<string>()
-            {
-                "Необходимо выбрать операцию. Используйте стрелки вниз-вверх для навигации. Для подтверждения нажмите - Ентер\n",
-                "[1] Редактировать информацию (в разработке)",
-                "[2] Добавить информацию (в разработке)",
-                "[3] Удалить информацию (в разработке)",
-                "[4] Выход из приложения"
-            };
-
-            int num = StartMenu(mainMenuOptions, 5);
-            switch (num)
-            {
-                case 1: { ChooseObjToEditMenu(); } break;
-                case 2: { ChooseObjToAddMenu(); } break;
-                case 3: { Console.WriteLine("выбор №3"); Console.ReadKey(); } break;
-                case 4: { } break;
-            }
-            if (num == mainMenuOptions.Count) Environment.Exit(0);
-        }
-
         static void Main(string[] args)
         {
             Employee empl1 = new Employee("Henry", "Ashford", 1, "A", "Manager");
@@ -131,17 +131,6 @@ namespace MainProgram
             dBService.AddItemToList(otherSystemSecurity);
 
             MainMenu();
-
-        }
-
-        public static int StartMenu(List<string> menuOptionsArray, int optionsLimit)
-        {
-            Console.Clear();
-            Console.SetWindowSize(110, 50);
-            foreach (string text in menuOptionsArray)
-                Console.WriteLine(text);
-            int num = Keys(optionsLimit, menuOptionsArray); // Bызов менюшки
-            return num;
         }
 
         static void ChooseObjToAddMenu()
@@ -156,7 +145,7 @@ namespace MainProgram
                 "[5] Назад в главное меню"
             };
             MenuDelegate menuDelegate = MainMenu;
-            int num = StartMenu(addMenuOptions, 6);
+            int num = MenuActions<object>.CreateMenuWindow(addMenuOptions, 6);
             switch (num)
             {
                 case 1: { MenuActions<Service>.AddItemToDataBase(dBService, menuDelegate); } break;
@@ -165,61 +154,11 @@ namespace MainProgram
                 case 4: { MenuActions<Employee>.AddItemToDataBase(dBEmployee, menuDelegate); } break;
                 case 5: { menuDelegate(); } break;
             }
-
         }
 
-        static int Keys(int optionsLimit, List<string> menuOptionArray) // Работа менюшки
+        public void Dispose()
         {
-            void PrintOption(List<string> menuOptionArray, int optionIndex)
-            {
-                Console.Clear();
-                for (int i = 0; i < menuOptionArray.Count; i++)
-                {
-                    if (i == optionIndex)
-                    {
-                        Console.BackgroundColor = ConsoleColor.Blue;
-                        Console.ForegroundColor = ConsoleColor.Green;
-                        Console.WriteLine(menuOptionArray[i]);
-                        Console.BackgroundColor = ConsoleColor.Black;
-                        Console.ForegroundColor = ConsoleColor.Gray;
-                    }
-                    else Console.WriteLine(menuOptionArray[i]);
-                }
-            }
-
-            int num = 0;
-            bool flag = false;
-            do
-            {
-                ConsoleKeyInfo keyPushed = Console.ReadKey();
-                if (keyPushed.Key == ConsoleKey.DownArrow)
-                {
-                    num++;
-                    PrintOption(menuOptionArray, num);
-                }
-                if (keyPushed.Key == ConsoleKey.UpArrow)
-                {
-                    num--;
-                    PrintOption(menuOptionArray, num);
-                }
-                if (keyPushed.Key == ConsoleKey.Enter)
-                {
-                    flag = true;
-                }
-                if (num == 0)
-                {
-                    num = menuOptionArray.Count;
-                    PrintOption(menuOptionArray, menuOptionArray.Count);
-                }
-                if (num == optionsLimit)
-                {
-                    num = 1;
-                    PrintOption(menuOptionArray, 1);
-                }
-            } while (!flag);
-            return num;
+            GC.SuppressFinalize(this);
         }
-
     }
-
 }
